@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.shell.highlighter;
+package tw.yukina.thinkorbit.service.shell.highlighter;
 
 import org.jline.reader.LineReader;
 import org.jline.utils.AttributedString;

@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.shell;
+package tw.yukina.thinkorbit.service.shell;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

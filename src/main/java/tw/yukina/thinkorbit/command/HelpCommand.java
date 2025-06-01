@@ -1,13 +1,13 @@
-package tw.yukina.thinkorbit.command.impl;
+package tw.yukina.thinkorbit.command;
 
 import org.jline.terminal.Terminal;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import tw.yukina.thinkorbit.command.Command;
-import tw.yukina.thinkorbit.command.CommandHandler;
-import tw.yukina.thinkorbit.command.CommandRegistry;
+import tw.yukina.thinkorbit.service.command.Command;
+import tw.yukina.thinkorbit.service.command.CommandHandler;
+import tw.yukina.thinkorbit.service.command.CommandRegistry;
 
 import java.util.Set;
 import java.util.TreeSet;

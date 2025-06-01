@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.command;
+package tw.yukina.thinkorbit.service.command;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +52,7 @@ public class CommandScanner implements ApplicationRunner {
         scanner.addIncludeFilter(new AnnotationTypeFilter(Command.class));
         
         // Only scan the impl subpackage to avoid scanning system components
-        Set<BeanDefinition> candidates = scanner.findCandidateComponents("tw.yukina.thinkorbit.command.impl");
+        Set<BeanDefinition> candidates = scanner.findCandidateComponents("tw.yukina.thinkorbit.command");
         
         for (BeanDefinition beanDefinition : candidates) {
             try {

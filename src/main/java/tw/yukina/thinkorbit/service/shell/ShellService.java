@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.shell;
+package tw.yukina.thinkorbit.service.shell;
 
 import org.jline.builtins.ssh.Ssh;
 import org.jline.terminal.Terminal;
@@ -6,9 +6,9 @@ import org.jline.utils.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import tw.yukina.thinkorbit.command.CommandRegistry;
-import tw.yukina.thinkorbit.shell.highlighter.SqlHighlighter;
-import tw.yukina.thinkorbit.shell.status.DefaultStatusProvider;
+import tw.yukina.thinkorbit.service.command.CommandRegistry;
+import tw.yukina.thinkorbit.service.shell.highlighter.SqlHighlighter;
+import tw.yukina.thinkorbit.service.shell.status.DefaultStatusProvider;
 
 import java.io.IOException;
 

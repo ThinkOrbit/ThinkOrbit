@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.shell;
+package tw.yukina.thinkorbit.service.shell;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

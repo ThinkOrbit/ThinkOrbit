@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.command;
+package tw.yukina.thinkorbit.service.command;
 
 import java.lang.annotation.*;
 

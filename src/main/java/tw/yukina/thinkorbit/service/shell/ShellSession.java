@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.shell;
+package tw.yukina.thinkorbit.service.shell;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -11,15 +11,14 @@ import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
 import org.jline.reader.EndOfFileException;
 import org.jline.terminal.Terminal;
-import org.jline.terminal.impl.AbstractTerminal;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.jline.utils.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tw.yukina.thinkorbit.command.CommandRegistry;
-import tw.yukina.thinkorbit.shell.highlighter.ShellHighlighter;
-import tw.yukina.thinkorbit.shell.status.ShellStatusProvider;
+import tw.yukina.thinkorbit.service.command.CommandRegistry;
+import tw.yukina.thinkorbit.service.shell.highlighter.ShellHighlighter;
+import tw.yukina.thinkorbit.service.shell.status.ShellStatusProvider;
 
 import java.util.ArrayList;
 import java.util.List;

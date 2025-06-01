@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.shell;
+package tw.yukina.thinkorbit.service.shell;
 
 /**
  * Factory 介面用於創建 ShellServer 實例

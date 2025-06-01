@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.command;
+package tw.yukina.thinkorbit.service.command;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jline.terminal.Terminal;

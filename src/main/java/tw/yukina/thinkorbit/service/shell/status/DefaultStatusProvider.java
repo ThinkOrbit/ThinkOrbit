@@ -1,4 +1,4 @@
-package tw.yukina.thinkorbit.shell.status;
+package tw.yukina.thinkorbit.service.shell.status;
 
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;

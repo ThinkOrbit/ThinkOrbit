@@ -1,10 +1,10 @@
-package tw.yukina.thinkorbit.command.impl;
+package tw.yukina.thinkorbit.command;
 
 import org.jline.terminal.Terminal;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import org.springframework.stereotype.Component;
-import tw.yukina.thinkorbit.command.Command;
+import tw.yukina.thinkorbit.service.command.Command;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
