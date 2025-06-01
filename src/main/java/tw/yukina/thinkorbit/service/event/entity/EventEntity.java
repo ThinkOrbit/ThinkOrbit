@@ -1,9 +1,7 @@
 package tw.yukina.thinkorbit.service.event.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.Map;
@@ -12,6 +10,9 @@ import java.util.Optional;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class EventEntity {
     @Id

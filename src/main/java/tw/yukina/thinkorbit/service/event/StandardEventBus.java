@@ -1,5 +1,6 @@
 package tw.yukina.thinkorbit.service.event;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.time.Instant;
 
+@Slf4j
 @Service
 public class StandardEventBus implements EventBus {
 
@@ -52,6 +54,8 @@ public class StandardEventBus implements EventBus {
         if (isClosed) {
             throw new IllegalStateException("EventBus is closed");
         }
+
+        log.info("Subscribing events to {}", filter);
 
         subscriptions.add(new EventSubscription(filter, listener));
     }
