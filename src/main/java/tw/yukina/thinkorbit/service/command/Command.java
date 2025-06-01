@@ -27,4 +27,10 @@ public @interface Command {
      * @return array of command aliases
      */
     String[] aliases() default {};
+    
+    /**
+     * Whether this command is interactive
+     * @return true if the command handles its own input loop
+     */
+    boolean interactive() default false;
 } 
