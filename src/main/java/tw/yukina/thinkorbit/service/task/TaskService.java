@@ -10,12 +10,15 @@ import tw.yukina.thinkorbit.service.intent.Intent;
 import tw.yukina.thinkorbit.service.intent.IntentMapping;
 import tw.yukina.thinkorbit.service.task.intent.CreateTask;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Service
-class TaskService {
+public class TaskService {
+
+    private final List<Task> tasks = new ArrayList<>();
 
     private final EventBus eventBus;
 
@@ -31,12 +34,19 @@ class TaskService {
         task.setId("task-" + System.currentTimeMillis());
         task.setName(intent.getPayload().getName());
 
+        tasks.add(task);
+
         EventEntity event = EventEntity.builder()
-                .type("created_task")
-                .source("order-service")
+                .type(TaskEvent.CREATED_TASK.getEventName())
+                .source(this.getClass().getSimpleName())
                 .payload(Map.of("taskId", task.getId(), "taskName", task.getName()))
                 .build();
+
         eventBus.publish(event);
+    }
+
+    public List<Task> getTasks() {
+        return List.copyOf(tasks);
     }
 
     @OnEvent(type = "created_task")

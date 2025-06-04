@@ -11,4 +11,8 @@ public enum TaskEvent {
     TaskEvent(String eventName) {
         this.eventName = eventName;
     }
+
+    public String toString() {
+        return eventName;
+    }
 }

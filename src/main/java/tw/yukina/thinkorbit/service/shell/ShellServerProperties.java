@@ -27,8 +27,8 @@ public class ShellServerProperties {
                 .port(port)
                 .username(username)
                 .password(password)
-                .authenticator((user, pass, _) ->
+                .authenticator((user, pass, session) ->
                     username.equals(user) && password.equals(pass))
                 .build();
     }
-} 
+}

@@ -16,7 +16,7 @@ import java.util.TreeSet;
  * Help command to list all available commands
  */
 @Component
-@Command(value = "help", description = "Display help information", aliases = {"?", "h"})
+@Command(value = "help", description = "Display help information")
 public class HelpCommand implements CommandHandler {
     
     private final CommandRegistry commandRegistry;

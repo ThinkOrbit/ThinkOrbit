@@ -1,10 +1,8 @@
 package tw.yukina.thinkorbit.service.command;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jline.reader.EndOfFileException;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.UserInterruptException;
+import org.jline.keymap.KeyMap;
+import org.jline.reader.*;
 import org.jline.terminal.Terminal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static org.jline.keymap.KeyMap.ctrl;
+
 /**
  * Registry for managing shell commands
  */
@@ -22,35 +22,35 @@ import java.util.Set;
 @Component
 public class CommandRegistry {
     private final Map<String, CommandWrapper> commands = new HashMap<>();
-    
+
     /**
      * Register a class-level command
      */
     public void registerCommand(String name, CommandHandler handler, String description) {
         registerCommand(name, handler, description, false);
     }
-    
+
     /**
      * Register a class-level command with interactive flag
      */
     public void registerCommand(String name, CommandHandler handler, String description, boolean interactive) {
         registerCommand(name, new CommandWrapper(handler, description, interactive));
     }
-    
+
     /**
      * Register a method-level command
      */
     public void registerCommand(String name, Object instance, Method method, String description) {
         registerCommand(name, instance, method, description, false);
     }
-    
+
     /**
      * Register a method-level command with interactive flag
      */
     public void registerCommand(String name, Object instance, Method method, String description, boolean interactive) {
         registerCommand(name, new CommandWrapper(instance, method, description, interactive));
     }
-    
+
     /**
      * Register command with aliases
      */
@@ -58,18 +58,18 @@ public class CommandRegistry {
     public void registerCommand(String name, CommandWrapper wrapper, String... aliases) {
         commands.put(name.toLowerCase(), wrapper);
         log.info("Registered command with alias: {}", name);
-        
+
         for (String alias : aliases) {
             commands.put(alias.toLowerCase(), wrapper);
             log.info("Registered alias '{}' for command '{}'", alias, name);
         }
     }
-    
+
     private void registerCommand(String name, CommandWrapper wrapper) {
         commands.put(name.toLowerCase(), wrapper);
         log.info("Registered command: {}", name);
     }
-    
+
     /**
      * Execute a command
      */
@@ -81,15 +81,15 @@ public class CommandRegistry {
 
         String commandName = parts[0].toLowerCase();
         CommandWrapper wrapper = commands.get(commandName);
-        
+
         if (wrapper == null) {
             terminal.writer().println("Unknown command: " + commandName);
             return false;
         }
-        
+
         String[] args = new String[parts.length - 1];
         System.arraycopy(parts, 1, args, 0, args.length);
-        
+
         try {
             // Handle interactive commands
             if (wrapper.isInteractive() && wrapper.handler instanceof InteractiveCommandHandler) {
@@ -103,7 +103,7 @@ public class CommandRegistry {
             return false;
         }
     }
-    
+
     /**
      * Execute an interactive command
      */
@@ -122,6 +122,16 @@ public class CommandRegistry {
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
                     .build();
+
+            KeyMap<Binding> mainMap = reader.getKeyMaps().get(LineReader.MAIN);
+            mainMap.bind(new Reference("clear-input-buffer"), ctrl('C'));
+            reader.getWidgets().put("clear-input-buffer", () -> {
+                Buffer buf = reader.getBuffer();
+                buf.clear();
+                reader.callWidget(LineReader.REDRAW_LINE); // Redraw the line
+                reader.callWidget(LineReader.REDISPLAY);   // Show the prompt again
+                return true;
+            });
 
             // Interactive loop
             while (!handler.shouldExit()) {
@@ -144,7 +154,7 @@ public class CommandRegistry {
             // Exit interactive mode
             handler.onExitInteractive(terminal);
             return true;
-            
+
         } catch (Exception e) {
             log.error("Error in interactive command execution: {}", e.getMessage(), e);
             terminal.writer().println("Error in interactive mode: " + e.getMessage());
@@ -158,7 +168,7 @@ public class CommandRegistry {
     public Set<String> getCommandNames() {
         return commands.keySet();
     }
-    
+
     /**
      * Get command description
      */
@@ -166,7 +176,7 @@ public class CommandRegistry {
         CommandWrapper wrapper = commands.get(commandName.toLowerCase());
         return wrapper != null ? wrapper.getDescription() : null;
     }
-    
+
     /**
      * Wrapper class for command information
      */
@@ -176,7 +186,7 @@ public class CommandRegistry {
         private final Method method;
         private final String description;
         private final boolean interactive;
-        
+
         // For class-level commands
         CommandWrapper(CommandHandler handler, String description, boolean interactive) {
             this.handler = handler;
@@ -185,7 +195,7 @@ public class CommandRegistry {
             this.description = description;
             this.interactive = interactive;
         }
-        
+
         // For method-level commands
         CommandWrapper(Object instance, Method method, String description, boolean interactive) {
             this.handler = null;
@@ -194,29 +204,29 @@ public class CommandRegistry {
             this.description = description;
             this.interactive = interactive;
         }
-        
+
         boolean execute(String[] args, Terminal terminal) throws Exception {
             if (handler != null) {
                 return handler.execute(args, terminal);
             } else if (method != null) {
                 Class<?>[] paramTypes = method.getParameterTypes();
-                if (paramTypes.length == 2 && 
-                    paramTypes[0] == String[].class && 
-                    paramTypes[1] == Terminal.class) {
+                if (paramTypes.length == 2 &&
+                        paramTypes[0] == String[].class &&
+                        paramTypes[1] == Terminal.class) {
                     Object result = method.invoke(instance, args, terminal);
                     return result instanceof Boolean ? (Boolean) result : true;
                 } else {
                     throw new IllegalArgumentException(
-                        "Command method must have signature: (String[] args, Terminal terminal)");
+                            "Command method must have signature: (String[] args, Terminal terminal)");
                 }
             }
             return false;
         }
-        
+
         String getDescription() {
             return description;
         }
-        
+
         boolean isInteractive() {
             return interactive;
         }

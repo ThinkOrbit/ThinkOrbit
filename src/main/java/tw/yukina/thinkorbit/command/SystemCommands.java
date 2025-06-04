@@ -32,7 +32,7 @@ public class SystemCommands {
         return true;
     }
     
-    @Command(value = "memory", description = "Display memory usage information", aliases = {"mem"})
+    @Command(value = "memory", description = "Display memory usage information")
     public boolean memoryCommand(String[] args, Terminal terminal) {
         MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
         MemoryUsage heapUsage = memoryBean.getHeapMemoryUsage();
@@ -59,7 +59,7 @@ public class SystemCommands {
         return true;
     }
     
-    @Command(value = "clear", description = "Clear the terminal screen", aliases = {"cls"})
+    @Command(value = "clear", description = "Clear the terminal screen")
     public boolean clearCommand(String[] args, Terminal terminal) {
         terminal.puts(org.jline.utils.InfoCmp.Capability.clear_screen);
         terminal.flush();

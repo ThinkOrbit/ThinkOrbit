@@ -11,9 +11,7 @@ import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
 import org.jline.reader.EndOfFileException;
 import org.jline.terminal.Terminal;
-import org.jline.utils.AttributedStringBuilder;
-import org.jline.utils.AttributedStyle;
-import org.jline.utils.Status;
+import org.jline.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tw.yukina.thinkorbit.service.command.CommandRegistry;
@@ -62,16 +60,18 @@ public class ShellSession {
                     .option(LineReader.Option.MENU_COMPLETE, true)
                     .build();
 
-            Status status = Status.getStatus(terminal);
-            if (status != null && statusProvider != null) {
-                statusProvider.start();
-            }
+//            Status status = Status.getStatus(terminal);
+//            if (status != null && statusProvider != null) {
+//                statusProvider.start();
+//            }
 
-            displayWelcomeMessage();
+            terminal.puts(InfoCmp.Capability.clear_screen);
+            getWelcomeMessage().println(terminal);
 
             while (!terminated) {
                 try {
-                    String line = reader.readLine("prompt> ");
+                    String line = reader.readLine("BIOS> ");
+
                     if (line == null || line.trim().equalsIgnoreCase("exit")) {
                         logger.info("User requested exit");
                         stop();
@@ -113,9 +113,7 @@ public class ShellSession {
 
     @SneakyThrows
     private void stop() {
-        displayGoodbyeMessage();
         terminal.flush();
-        Thread.sleep(100);
 
         terminated = true;
         if (statusProvider != null) {
@@ -123,28 +121,17 @@ public class ShellSession {
         }
 
         try {
-            terminal.close();
             params.getSession().close();
+            terminal.close();
         } catch (Exception e) {
             logger.error("Error closing terminal", e);
         }
     }
 
-    private void displayWelcomeMessage() {
+    private AttributedString getWelcomeMessage() {
         AttributedStringBuilder builder = new AttributedStringBuilder();
-        builder.append("Welcome to the SSH shell!")
-                .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW));
-        builder.append("\nType 'help' for available commands or 'exit' to close the session.")
-                .style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN));
-        builder.append("\n\n");
-        terminal.writer().print(builder.toAttributedString());
+        builder.style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW)).append("Welcome to the SSH shell!");
+        builder.style(AttributedStyle.BOLD.foreground(AttributedStyle.GREEN)).append("\nType 'help' for available commands or 'exit' to close the session.");
+        return builder.toAttributedString();
     }
-
-    private void displayGoodbyeMessage() {
-        AttributedStringBuilder builder = new AttributedStringBuilder();
-        builder.append("\nGoodbye! Connection closed.")
-                .style(AttributedStyle.BOLD.foreground(AttributedStyle.YELLOW));
-        builder.append("\n");
-        terminal.writer().print(builder.toAttributedString());
-    }
-} 
+}
